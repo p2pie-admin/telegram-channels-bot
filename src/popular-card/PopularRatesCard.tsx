@@ -225,8 +225,7 @@ const Greeting = ({ cityLabel }: { cityLabel: string }) => {
     "colors",
     useColorModeValue(["bg.500", "violet.700"], ["bg.200", "peach.300"]),
   );
-  const base = process.env.NEXT_PUBLIC_BASE || "p2pie.com";
-  const greetingSrc = `https://${base}/greetings.png`;
+  const greetingSrc = "https://p2pie.com/greetings.png";
 
   return (
     <VStack
@@ -278,8 +277,13 @@ export const PopularRatesCard = ({
   generatedAt,
   city,
 }: PopularRatesCardProps) => {
-  const cityLabel =
-    city?.preposition || city?.ru_name || city?.en_name || "городе";
+  const cityLabel = city?.preposition
+    ? city.preposition
+    : city?.ru_name
+      ? `в ${city.ru_name}`
+      : city?.en_name
+        ? `в ${city.en_name}`
+        : "в городе";
   return (
     <Box position="relative" overflowX="hidden">
       <VStack align="stretch" spacing="3">

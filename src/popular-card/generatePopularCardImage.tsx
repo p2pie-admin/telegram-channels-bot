@@ -35,9 +35,11 @@ export const generatePopularCardImage = async (
   const browser = await chromium.launch({ headless: true });
   try {
     const rows = Math.max(1, Math.ceil(sections.length / 2));
-    const page = await browser.newPage({
+    const context = await browser.newContext({
+      ignoreHTTPSErrors: true,
       viewport: { width: 820, height: Math.max(260, rows * 190 + 80) },
     });
+    const page = await context.newPage();
     await page.setContent(renderHtml(sections, city), { waitUntil: "networkidle" });
 
     const outputDir = path.resolve(process.cwd(), "generated");

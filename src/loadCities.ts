@@ -26,7 +26,20 @@ const CITIES_QUERY = `
   }
 `;
 
+const toBool = (value?: string): boolean => String(value).toLowerCase() === "true";
+const isProduction = (): boolean => process.env.NODE_ENV === "production";
+
 const resolveCmsGraphqlUrl = (): string => {
+  const internal = process.env.INTERNAL_CMS_URL
+    ? `${process.env.INTERNAL_CMS_URL.replace(/\/$/, "")}/graphql`
+    : undefined;
+  if (isProduction() && internal) {
+    return internal;
+  }
+  if (toBool(process.env.USE_INTERNAL) && internal) {
+    return internal;
+  }
+
   if (process.env.CMS_GRAPHQL_URL) {
     return process.env.CMS_GRAPHQL_URL;
   }

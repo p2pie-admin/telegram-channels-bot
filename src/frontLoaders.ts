@@ -27,8 +27,11 @@ type GraphqlResponse<T> = {
 
 const toBool = (value?: string): boolean => String(value).toLowerCase() === "true";
 
+const isProduction = (): boolean => process.env.NODE_ENV === "production";
+
 const resolveInternalUrl = (external: string, internal?: string): string => {
   const useInternal = toBool(process.env.USE_INTERNAL);
+  if (isProduction() && internal) return internal;
   return useInternal && internal ? internal : external;
 };
 
