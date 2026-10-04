@@ -28,18 +28,18 @@ const buildCaption = (
   const buyLinks = cryptos
     .map(
       ({ code, label }) =>
-        `<a href="https://p2pie.com/buy/${encodeURIComponent(code)}-for-rub?city=${encodeURIComponent(cityQuery)}">${label.slice(0, 4)}</a>`,
+        `<a href="https://p2pie.com/buy/${encodeURIComponent(code)}-for-rub?city=${encodeURIComponent(cityQuery)}&utm_source=telegram&utm_medium=channel&utm_campaign=${encodeURIComponent(citySlug || cityQuery)}&utm_content=buy">${label.slice(0, 4)}</a>`,
     )
     .join(" | ");
 
   const sellLinks = cryptos
     .map(
       ({ code, label }) =>
-        `<a href="https://p2pie.com/sell/${encodeURIComponent(code)}-for-rub?city=${encodeURIComponent(cityQuery)}">${label.slice(0, 4)}</a>`,
+        `<a href="https://p2pie.com/sell/${encodeURIComponent(code)}-for-rub?city=${encodeURIComponent(cityQuery)}&utm_source=telegram&utm_medium=channel&utm_campaign=${encodeURIComponent(citySlug || cityQuery)}&utm_content=sell">${label.slice(0, 4)}</a>`,
     )
     .join(" | ");
 
-  return `Купить ........ ${buyLinks}\nПродать ...... ${sellLinks}\n\n Мониторинг <a href="https://p2pie.com">p2pie</a> — это агрегатор проверенных обменников, участников <a href="https://www.bestchange.ru/">BestChange</a>, <a href="https://kurs.expert/">KursExpert</a>, <a href="https://exnode.ru/">ExNode</a> и др. \nСервис не участвует в финансовых операциях.`;
+  return `Купить ........ ${buyLinks}\nПродать ...... ${sellLinks}\n\n Мониторинг <a href="https://p2pie.com/?utm_source=telegram&utm_medium=channel&utm_campaign=${encodeURIComponent(citySlug || cityQuery)}&utm_content=footer">p2pie</a> — это агрегатор проверенных обменников, участников <a href="https://www.bestchange.ru/">BestChange</a>, <a href="https://kurs.expert/">KursExpert</a>, <a href="https://exnode.ru/">ExNode</a> и др. \nСервис не участвует в финансовых операциях.`;
 };
 
 export const sendPopularCardsToTarget = async (
