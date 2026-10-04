@@ -39,7 +39,7 @@ const buildCaption = (
     )
     .join(" | ");
 
-  return `Купить ........ ${buyLinks}\nПродать ...... ${sellLinks}\n\nМониторинг <a href="https://p2pie.com">p2pie</a> — это агрегатор проверенных обменников, участников <a href="https://www.bestchange.ru/">BestChange</a>, <a href="https://kurs.expert/">KursExpert</a>, <a href="https://exnode.ru/">ExNode</a> и др. \nСервис не участвует в финансовых операциях.`;
+  return `Купить ........ ${buyLinks}\nПродать ...... ${sellLinks}\n\n Мониторинг <a href="https://p2pie.com">p2pie</a> — это агрегатор проверенных обменников, участников <a href="https://www.bestchange.ru/">BestChange</a>, <a href="https://kurs.expert/">KursExpert</a>, <a href="https://exnode.ru/">ExNode</a> и др. \nСервис не участвует в финансовых операциях.`;
 };
 
 export const sendPopularCardsToTarget = async (
