@@ -95,18 +95,19 @@ const getMoscowNowParts = (date = new Date()) => {
 const msUntilNextMoscowRun = (now = new Date()): number => {
   const p = getMoscowNowParts(now);
   const currentMinutes = p.hour * 60 + p.minute;
-  const targetMinutes = currentMinutes < 8 * 60 ? 8 * 60 : currentMinutes < 20 * 60 ? 20 * 60 : 32 * 60; // next day 08:00
+  const targetMinutes = currentMinutes < 12 * 60 ? 12 * 60 : 36 * 60; // next day 12:00
   const deltaMinutes = targetMinutes - currentMinutes;
   const deltaMs =
     deltaMinutes * 60 * 1000 - p.second * 1000 - now.getMilliseconds();
   return Math.max(1000, deltaMs);
 };
 
+let lastAutopublishDate = "";
 const scheduleChannelsAutopublish = () => {
   const delay = msUntilNextMoscowRun();
   const nextRunAt = new Date(Date.now() + delay);
   console.log(
-    `[channelsAutopublish] Next run scheduled in ${Math.round(delay / 1000)}s at ${nextRunAt.toISOString()} (08:00/20:00 Europe/Moscow)`,
+    `[channelsAutopublish] Next run scheduled in ${Math.round(delay / 1000)}s at ${nextRunAt.toISOString()} (daily 12:00 Europe/Moscow)`,
   );
 
   setTimeout(async () => {
@@ -115,7 +116,11 @@ const scheduleChannelsAutopublish = () => {
       console.log(
         `[channelsAutopublish] Triggered at Moscow time ${String(parts.hour).padStart(2, "0")}:${String(parts.minute).padStart(2, "0")}`,
       );
-      await runChannelsAutopublish();
+      const today = `${parts.year}-${parts.month}-${parts.day}`;
+      if (parts.hour >= 12 && lastAutopublishDate !== today) {
+        lastAutopublishDate = today;
+        await runChannelsAutopublish();
+      }
     } catch (error) {
       console.error("[channelsAutopublish] Failed:", error);
     } finally {
@@ -267,13 +272,14 @@ const start = async () => {
   await app.listen({ port, host: "0.0.0.0" });
   app.log.info(`HTTP server listening on port ${port}`);
 
+  // bot.start() long-polls and never resolves: the schedule must be armed before it.
+  scheduleChannelsAutopublish();
+
   await bot.start({
     onStart: (botInfo) => {
       app.log.info(`Bot started as @${botInfo.username}`);
     },
   });
-
-  scheduleChannelsAutopublish();
 };
 
 start().catch((error) => {
